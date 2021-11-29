@@ -1,0 +1,189 @@
+{
+  "apiVersion" : "apps/v1",
+  "kind" : "Deployment",
+  "metadata" : {
+    "annotations" : {
+      "jkube.io/git-branch" : "master",
+      "jkube.io/git-commit" : "c483ca31a9bf34adaba7c852a708dd902a372019",
+      "jkube.io/git-url" : "https://github.com/VivekBuzruk/jkubeExamples.git"
+    },
+    "creationTimestamp" : "2021-11-27T07:24:09Z",
+    "generation" : 1,
+    "labels" : {
+      "app" : "helloConsole",
+      "group" : "coin.stech.jkube",
+      "provider" : "jkube",
+      "version" : "1.0.1"
+    },
+    "managedFields" : [ {
+      "apiVersion" : "apps/v1",
+      "fieldsType" : "FieldsV1",
+      "fieldsV1" : {
+        "f:metadata" : {
+          "f:annotations" : {
+            "." : { },
+            "f:jkube.io/git-branch" : { },
+            "f:jkube.io/git-commit" : { },
+            "f:jkube.io/git-url" : { }
+          },
+          "f:labels" : {
+            "." : { },
+            "f:app" : { },
+            "f:group" : { },
+            "f:provider" : { },
+            "f:version" : { }
+          }
+        },
+        "f:spec" : {
+          "f:progressDeadlineSeconds" : { },
+          "f:replicas" : { },
+          "f:revisionHistoryLimit" : { },
+          "f:selector" : { },
+          "f:strategy" : {
+            "f:rollingUpdate" : {
+              "." : { },
+              "f:maxSurge" : { },
+              "f:maxUnavailable" : { }
+            },
+            "f:type" : { }
+          },
+          "f:template" : {
+            "f:metadata" : {
+              "f:annotations" : {
+                "." : { },
+                "f:jkube.io/git-branch" : { },
+                "f:jkube.io/git-commit" : { },
+                "f:jkube.io/git-url" : { }
+              },
+              "f:labels" : {
+                "." : { },
+                "f:app" : { },
+                "f:group" : { },
+                "f:provider" : { },
+                "f:version" : { }
+              }
+            },
+            "f:spec" : {
+              "f:containers" : {
+                "k:{\"name\":\"jkube-hello-console-world\"}" : {
+                  "." : { },
+                  "f:env" : {
+                    "." : { },
+                    "k:{\"name\":\"HOSTNAME\"}" : {
+                      "." : { },
+                      "f:name" : { },
+                      "f:valueFrom" : {
+                        "." : { },
+                        "f:fieldRef" : { }
+                      }
+                    },
+                    "k:{\"name\":\"KUBERNETES_NAMESPACE\"}" : {
+                      "." : { },
+                      "f:name" : { },
+                      "f:valueFrom" : {
+                        "." : { },
+                        "f:fieldRef" : { }
+                      }
+                    }
+                  },
+                  "f:image" : { },
+                  "f:imagePullPolicy" : { },
+                  "f:name" : { },
+                  "f:resources" : { },
+                  "f:securityContext" : {
+                    "." : { },
+                    "f:privileged" : { }
+                  },
+                  "f:terminationMessagePath" : { },
+                  "f:terminationMessagePolicy" : { }
+                }
+              },
+              "f:dnsPolicy" : { },
+              "f:restartPolicy" : { },
+              "f:schedulerName" : { },
+              "f:securityContext" : { },
+              "f:terminationGracePeriodSeconds" : { }
+            }
+          }
+        }
+      },
+      "manager" : "okhttp",
+      "operation" : "Update",
+      "time" : "2021-11-27T07:24:09Z"
+    } ],
+    "name" : "helloconsole",
+    "namespace" : "default",
+    "resourceVersion" : "900382",
+    "uid" : "b290fdc5-dd93-4b79-8921-0a6afa46b219"
+  },
+  "spec" : {
+    "progressDeadlineSeconds" : 600,
+    "replicas" : 1,
+    "revisionHistoryLimit" : 2,
+    "selector" : {
+      "matchLabels" : {
+        "app" : "helloConsole",
+        "group" : "coin.stech.jkube",
+        "provider" : "jkube"
+      }
+    },
+    "strategy" : {
+      "rollingUpdate" : {
+        "maxSurge" : "25%",
+        "maxUnavailable" : "25%"
+      },
+      "type" : "RollingUpdate"
+    },
+    "template" : {
+      "metadata" : {
+        "annotations" : {
+          "jkube.io/git-branch" : "master",
+          "jkube.io/git-commit" : "c483ca31a9bf34adaba7c852a708dd902a372019",
+          "jkube.io/git-url" : "https://github.com/VivekBuzruk/jkubeExamples.git"
+        },
+        "labels" : {
+          "app" : "helloConsole",
+          "group" : "coin.stech.jkube",
+          "provider" : "jkube",
+          "version" : "1.0.1"
+        }
+      },
+      "spec" : {
+        "containers" : [ {
+          "env" : [ {
+            "name" : "KUBERNETES_NAMESPACE",
+            "valueFrom" : {
+              "fieldRef" : {
+                "apiVersion" : "v1",
+                "fieldPath" : "metadata.namespace"
+              }
+            }
+          }, {
+            "name" : "HOSTNAME",
+            "valueFrom" : {
+              "fieldRef" : {
+                "apiVersion" : "v1",
+                "fieldPath" : "metadata.name"
+              }
+            }
+          } ],
+          "image" : "jkube-helloworld-java:1.0.1",
+          "imagePullPolicy" : "IfNotPresent",
+          "name" : "jkube-hello-console-world",
+          "resources" : { },
+          "securityContext" : {
+            "privileged" : false
+          },
+          "terminationMessagePath" : "/dev/termination-log",
+          "terminationMessagePolicy" : "File"
+        } ],
+        "dnsPolicy" : "ClusterFirst",
+        "restartPolicy" : "Always",
+        "schedulerName" : "default-scheduler",
+        "securityContext" : { },
+        "terminationGracePeriodSeconds" : 30
+      }
+    }
+  },
+  "status" : { }
+}
