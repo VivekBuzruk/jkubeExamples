@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>coin.stech.jkube</groupId>
+  <artifactId>helloConsole</artifactId>
+  <version>1.0.1</version>
+  <name>Eclipse JKube :: Hello World Console</name>
+  <packaging>jar</packaging>
+
+  <description>
+    Sample project for getting started with Eclipse JKube.
+    Just prints "Hello JKube World Console!" on command line and exits.
+  </description>
+
+  <properties>
+    <jkube.version>1.5.1</jkube.version>
+    <slf4j.version>1.7.32</slf4j.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <!-- == .:.:. Logging .:.:. == -->
+     <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-api</artifactId>
+         <version>${slf4j.version}</version>
+     </dependency>
+     <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-simple</artifactId>
+         <version>${slf4j.version}</version>
+     </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.6.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.18.1</version>
+        <inherited>true</inherited>
+        <configuration>
+          <excludes>
+            <exclude>**/*KT.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <configuration>
+          <mainClass>coin.stech.jkube.helloConsole.App</mainClass>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+               <mainClass>coin.stech.jkube.helloConsole.App</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.jkube</groupId>
+        <artifactId>kubernetes-maven-plugin</artifactId>
+        <version>${jkube.version}</version>
+        <configuration>
+          <images>
+            <image>
+              <name>jkube-helloworld-java:${project.version}</name>
+              <alias>jkube-hello-console-world</alias>
+              <build>
+                <from>openjdk:latest</from>
+                <assembly>
+                   <targetDir>/Deployments</targetDir>
+                   <inline>
+                      <fileSets>
+                         <fileSet>
+                             <directory>${project.build.directory}/lib</directory>
+                         </fileSet>
+                      </fileSets>
+                   </inline>
+                </assembly>
+                <env>
+                   <JAVA_LIB_DIR>/Deployments/lib/*</JAVA_LIB_DIR>
+                   <JAVA_MAIN_CLASS>coin.stech.jkube.helloConsole.App</JAVA_MAIN_CLASS>
+                </env>
+                <cmd>java -cp "/Deployments/${project.artifactId}-${project.version}.jar:/Deployments/lib/slf4j-api-${slf4j.version}.jar:/Deployments/lib/slf4j-simple-${slf4j.version}.jar" coin.stech.jkube.helloConsole.App</cmd>
+              </build>
+              <run>
+                <wait>
+                  <log>Hello Jkube World Console!</log>
+                </wait>
+              </run>
+            </image>
+          </images>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
